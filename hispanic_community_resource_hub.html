@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comunidad Resource Hub</title>
+  <style>
+    :root{
+      --bg1:#fff7ed;
+      --bg2:#ecfdf5;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --accent:#ea580c;
+      --accent2:#059669;
+      --shadow:0 10px 30px rgba(15,23,42,0.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:linear-gradient(135deg,var(--bg1),#ffffff 45%,var(--bg2));
+    }
+
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1180px,92vw);margin:0 auto}
+
+    .hero{
+      border-bottom:1px solid var(--line);
+      padding:72px 0 44px;
+      background:
+        radial-gradient(circle at top left, rgba(234,88,12,0.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(5,150,105,0.12), transparent 26%);
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.25fr .85fr;
+      gap:36px;
+      align-items:center;
+    }
+
+    .pill{
+      display:inline-block;
+      background:#111827;
+      color:#fff;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:14px;
+      margin-bottom:16px;
+      font-weight:700;
+    }
+
+    h1{
+      font-size:clamp(2.2rem, 4vw, 3.8rem);
+      line-height:1.05;
+      margin:0;
+      max-width:720px;
+    }
+
+    .lead{
+      margin-top:18px;
+      font-size:1.1rem;
+      line-height:1.7;
+      color:var(--muted);
+      max-width:720px;
+    }
+
+    .btn-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:28px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:13px 18px;
+      border-radius:18px;
+      border:1px solid transparent;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+      box-shadow:none;
+      font-size:0.95rem;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
+      background:var(--text);
+      color:#fff;
+    }
+
+    .btn-secondary{
+      background:#fff;
+      border-color:var(--line);
+      color:var(--text);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .stat{
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat strong{
+      display:block;
+      font-size:1.7rem;
+      margin-bottom:6px;
+    }
+
+    .stat span{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .section{
+      padding:34px 0;
+    }
+
+    .quick-grid,
+    .resource-grid,
+    .info-grid{
+      display:grid;
+      gap:18px;
+    }
+
+    .quick-grid{
+      grid-template-columns:repeat(4,1fr);
+    }
+
+    .resource-grid{
+      grid-template-columns:repeat(3,1fr);
+    }
+
+    .info-grid{
+      grid-template-columns:1.2fr .8fr;
+      padding-bottom:44px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .card.hover:hover{
+      transform:translateY(-4px);
+      box-shadow:0 16px 34px rgba(15,23,42,0.12);
+    }
+
+    .card h3{
+      margin:0 0 12px;
+      font-size:1.15rem;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:18px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+
+    .toolbar h2{
+      margin:0;
+      font-size:2rem;
+    }
+
+    .toolbar p{
+      margin:8px 0 0;
+      color:var(--muted);
+    }
+
+    .search-box{
+      width:min(460px,100%);
+      position:relative;
+    }
+
+    .search-box input{
+      width:100%;
+      padding:14px 16px;
+      border:1px solid #cbd5e1;
+      border-radius:18px;
+      font-size:1rem;
+      outline:none;
+      background:#fff;
+    }
+
+    .filters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:18px 0 26px;
+    }
+
+    .filter-btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .filter-btn.active{
+      background:var(--text);
+      color:#fff;
+      border-color:var(--text);
+    }
+
+    .meta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:16px;
+    }
+
+    .icon-box{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background:#f1f5f9;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.35rem;
+      flex-shrink:0;
+    }
+
+    .badge-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+
+    .badge{
+      background:#f1f5f9;
+      color:#334155;
+      padding:7px 11px;
+      border-radius:999px;
+      font-size:.8rem;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .audience{
+      margin-top:8px;
+      color:#64748b;
+      font-size:.93rem;
+    }
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .tag{
+      background:#f1f5f9;
+      color:#334155;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:.78rem;
+    }
+
+    .quick-action{
+      margin-top:14px;
+      display:inline-block;
+      font-weight:700;
+      color:var(--accent2);
+    }
+
+    .alert{
+      background:rgba(255,247,237,.85);
+      border-color:#fed7aa;
+    }
+
+    .footer{
+      border-top:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      padding:24px 0 34px;
+    }
+
+    .footer-wrap{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      color:var(--muted);
+    }
+
+    .footer strong{
+      display:block;
+      color:var(--text);
+      margin-bottom:4px;
+    }
+
+    .hidden{display:none}
+
+    .empty{
+      text-align:center;
+      padding:40px 18px;
+      color:var(--muted);
+      border:1px dashed #cbd5e1;
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.6);
+    }
+
+    @media (max-width: 1000px){
+      .hero-grid,
+      .quick-grid,
+      .resource-grid,
+      .info-grid{
+        grid-template-columns:1fr;
+      }
+      .stats{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media (max-width: 640px){
+      .hero{padding-top:46px}
+      .stats{grid-template-columns:1fr}
+      .btn-row{flex-direction:column;align-items:flex-start}
+      .badge-wrap{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="pill">Comunidad Resource Hub</div>
+        <h1>Resources for the Hispanic community, all in one place.</h1>
+        <p class="lead">
+          A simple starting point for scholarships, health support, legal guidance,
+          career growth, entrepreneurship, and community-based help.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#resources">Explore resources</a>
+          <button class="btn btn-secondary" onclick="setCategory('Legal'); document.getElementById('resources').scrollIntoView();">
+            Find legal help
+          </button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><strong>12+</strong><span>Trusted resource links</span></div>
+        <div class="stat"><strong>6</strong><span>Core support areas</span></div>
+        <div class="stat"><strong>ES / EN</strong><span>Bilingual-friendly options</span></div>
+        <div class="stat"><strong>24/7</strong><span>Crisis support access</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container quick-grid">
+      <div class="card">
+        <h3>Need scholarship help?</h3>
+        <p>Start with HSF, TheDream.US, SHPE, and ColorStack for education support and growth opportunities.</p>
+        <button class="btn btn-secondary" style="margin-top:16px" onclick="setCategory('Education')">Open Education</button>
+      </div>
+      <div class="card">
+        <h3>Need health resources?</h3>
+        <p>Browse community-centered health support and bilingual wellness information.</p>
+        <button class="btn btn-secondary" style="margin-top:16px" onclick="setCategory('Health')">Open Health</button>
+      </div>
+      <div class="card">
+        <h3>Need immigration help?</h3>
+        <p>Use the legal directory first, then check USCIS en Español and NILC resources.</p>
+        <button class="btn btn-secondary" style="margin-top:16px" onclick="setCategory('Legal')">Open Legal</button>
+      </div>
+      <div class="card">
+        <h3>Need community and support?</h3>
+        <p>Explore SHPE, ColorStack, and UnidosUS for connection, mentorship, advocacy, and growth.</p>
+        <button class="btn btn-secondary" style="margin-top:16px" onclick="setCategory('Community')">Open Community</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="resources">
+    <div class="container">
+      <div class="toolbar">
+        <div>
+          <h2>Browse resources</h2>
+          <p>Search by topic or filter by category to find a good starting point.</p>
+        </div>
+        <div class="search-box">
+          <input id="searchInput" type="text" placeholder="Search scholarships, immigration, health, careers..." />
+        </div>
+      </div>
+
+      <div class="filters" id="filters"></div>
+
+      <div class="resource-grid" id="resourceGrid"></div>
+      <div id="emptyState" class="empty hidden">
+        No matches yet. Try a broader search like “health,” “scholarships,” or “immigration,” or switch back to “All.”
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-grid">
+      <div class="card alert">
+        <h3>Need help right now?</h3>
+        <p>
+          For urgent mental health or emotional support in Spanish, contact the 988 Lifeline.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://988lifeline.org/es/servicios-de-traduccion/servicios-en-espanol/" target="_blank" rel="noreferrer">Call or text 988</a>
+          <a class="btn btn-secondary" href="https://www.healthyamericas.org/help-line" target="_blank" rel="noreferrer">Health helpline</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Good to know</h3>
+        <p>
+          This page is a starting point and does not replace advice from a licensed attorney, doctor, or crisis professional.
+        </p>
+        <p style="margin-top:14px;">
+          When possible, use official or nonprofit sources, double-check eligibility requirements, and keep important deadlines in one place.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <div>
+        <strong>Comunidad Resource Hub</strong>
+        <div>A simple, welcoming website concept for the Hispanic community.</div>
+      </div>
+      <div>Built to be expanded with local, school, or city-specific resources.</div>
+    </div>
+  </footer>
+
+  <script>
+    const categories = [
+      "All",
+      "Education",
+      "Health",
+      "Legal",
+      "Career",
+      "Business",
+      "Community",
+      "Crisis Support"
+    ];
+
+    const resources = [
+      {
+        title: "UnidosUS",
+        categories: ["Community"],
+        icon: "🤝",
+        audience: "Families, students, workers, and advocates",
+        description: "A major Latino-serving nonprofit with resources and advocacy across education, workforce development, housing, health, and civic life.",
+        link: "https://unidosus.org/",
+        tags: ["Community", "Education", "Workforce", "Advocacy"]
+      },
+      {
+        title: "Hispanic Scholarship Fund",
+        categories: ["Education"],
+        icon: "🎓",
+        audience: "Students and families planning for college",
+        description: "Scholarship opportunities, college guidance, and career preparation support for students of Hispanic heritage.",
+        link: "https://www.hsf.net/",
+        tags: ["Scholarships", "College", "Students"]
+      },
+      {
+        title: "TheDream.US",
+        categories: ["Education"],
+        icon: "📘",
+        audience: "Undocumented students and Dreamers",
+        description: "Scholarship and college success resources created specifically for Dreamer students pursuing higher education.",
+        link: "https://www.thedream.us/",
+        tags: ["Dreamers", "Scholarships", "College Access"]
+      },
+      {
+        title: "SHPE",
+        categories: ["Education", "Community"],
+        icon: "🚀",
+        audience: "Students, professionals, and STEM community members",
+        description: "SHPE empowers the Hispanic community through STEM awareness, access, support, development, mentorship, events, and professional opportunities.",
+        link: "https://shpe.org/",
+        tags: ["STEM", "Mentorship", "Community", "Professional Development"]
+      },
+      {
+        title: "ColorStack",
+        categories: ["Education", "Community"],
+        icon: "🧡",
+        audience: "Black and Latinx students in computer science and related fields",
+        description: "ColorStack builds community, academic support, and career development opportunities for Black and Latinx computing students.",
+        link: "https://www.colorstack.org/",
+        tags: ["Computer Science", "Community", "Academic Support", "Career Development"]
+      },
+      {
+        title: "National Alliance for Hispanic Health",
+        categories: ["Health"],
+        icon: "💙",
+        audience: "Individuals and families seeking health support",
+        description: "Health education, family wellness information, and trusted programs tailored to Hispanic communities.",
+        link: "https://www.healthyamericas.org/",
+        tags: ["Health", "Wellness", "Family Support"]
+      },
+      {
+        title: "988 Lifeline en Español",
+        categories: ["Crisis Support"],
+        icon: "☎️",
+        audience: "Anyone needing urgent emotional or mental health support",
+        description: "Free 24/7 crisis support in Spanish by call, text, or chat for mental health, substance use, and emotional distress.",
+        link: "https://988lifeline.org/es/servicios-de-traduccion/servicios-en-espanol/",
+        tags: ["Mental Health", "Emergency", "Spanish Support"]
+      },
+      {
+        title: "National Immigration Law Center",
+        categories: ["Legal"],
+        icon: "⚖️",
+        audience: "Immigrant families and community advocates",
+        description: "Know-your-rights materials, policy resources, and legal information focused on immigrant communities.",
+        link: "https://www.nilc.org/",
+        tags: ["Immigration", "Know Your Rights", "Legal Info"]
+      },
+      {
+        title: "Immigration Advocates Network Directory",
+        categories: ["Legal"],
+        icon: "🧭",
+        audience: "People looking for free or low-cost immigration legal help",
+        description: "Searchable directory to help users find nonprofit immigration legal services by location.",
+        link: "https://www.immigrationadvocates.org/legaldirectory/",
+        tags: ["Directory", "Legal Help", "Immigration"]
+      },
+      {
+        title: "USCIS en Español",
+        categories: ["Legal"],
+        icon: "🌐",
+        audience: "People navigating immigration forms and case information",
+        description: "Official U.S. government Spanish-language immigration resources, forms, case tools, and citizenship information.",
+        link: "https://www.uscis.gov/es",
+        tags: ["Government", "Forms", "Citizenship"]
+      },
+      {
+        title: "ALPFA",
+        categories: ["Career"],
+        icon: "💼",
+        audience: "Students and professionals building their careers",
+        description: "Leadership, mentorship, networking, and career development opportunities for Latino professionals and students.",
+        link: "https://www.alpfa.org/",
+        tags: ["Networking", "Leadership", "Career Growth"]
+      },
+      {
+        title: "SBA en Español",
+        categories: ["Business"],
+        icon: "🏢",
+        audience: "Small business owners and aspiring entrepreneurs",
+        description: "Spanish-language guidance for starting, funding, and growing a business, including planning and support tools.",
+        link: "https://www.sba.gov/es",
+        tags: ["Business", "Entrepreneurship", "Funding"]
+      }
+    ];
+
+    let activeCategory = "All";
+
+    const filtersEl = document.getElementById("filters");
+    const gridEl = document.getElementById("resourceGrid");
+    const searchInput = document.getElementById("searchInput");
+    const emptyState = document.getElementById("emptyState");
+
+    function renderFilters() {
+      filtersEl.innerHTML = "";
+      categories.forEach(category => {
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (activeCategory === category ? " active" : "");
+        btn.textContent = category;
+        btn.onclick = () => setCategory(category);
+        filtersEl.appendChild(btn);
+      });
+    }
+
+    function renderResources() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      const filtered = resources.filter(resource => {
+        const matchesCategory =
+          activeCategory === "All" || resource.categories.includes(activeCategory);
+
+        const haystack = [
+          resource.title,
+          resource.categories.join(" "),
+          resource.audience,
+          resource.description,
+          resource.tags.join(" ")
+        ].join(" ").toLowerCase();
+
+        return matchesCategory && haystack.includes(query);
+      });
+
+      gridEl.innerHTML = "";
+
+      if (!filtered.length) {
+        emptyState.classList.remove("hidden");
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+
+      filtered.forEach(resource => {
+        const card = document.createElement("a");
+        card.href = resource.link;
+        card.target = "_blank";
+        card.rel = "noreferrer";
+        card.className = "card hover";
+
+        card.innerHTML = `
+          <div class="meta">
+            <div class="icon-box">${resource.icon}</div>
+            <div class="badge-wrap">
+              ${resource.categories.map(category => `<span class="badge">${category}</span>`).join("")}
+            </div>
+          </div>
+          <h3>${resource.title}</h3>
+          <div class="audience">${resource.audience}</div>
+          <p style="margin-top:14px;">${resource.description}</p>
+          <div class="tags">
+            ${resource.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+          <span class="quick-action">Open resource ↗</span>
+        `;
+        gridEl.appendChild(card);
+      });
+    }
+
+    function setCategory(category) {
+      activeCategory = category;
+      renderFilters();
+      renderResources();
+    }
+
+    searchInput.addEventListener("input", renderResources);
+
+    renderFilters();
+    renderResources();
+  </script>
+</body>
+</html>
